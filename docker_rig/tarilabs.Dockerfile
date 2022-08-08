@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1.3
 # rust source compile with cross platform build support
-FROM --platform=$BUILDPLATFORM rust:1.62.1-bullseye as builder
+FROM --platform=$BUILDPLATFORM rust:1.62-bullseye as builder
 
 # Declare to make available
 ARG BUILDPLATFORM
@@ -32,6 +32,8 @@ RUN --mount=type=cache,id=build-apt-cache-${BUILDOS}-${BUILDARCH}${BUILDVARIANT}
   telnet \
   cargo \
   clang \
+  gcc-aarch64-linux-gnu \
+  g++-aarch64-linux-gnu \
   cmake
 
 ARG ARCH=native
@@ -46,17 +48,6 @@ ARG APP_EXEC=tari_console_wallet
 
 RUN if [ "${BUILDARCH}" != "${TARGETARCH}" ] && [ "${ARCH}" = "native" ] ; then \
       echo "!! Cross-compile and native ARCH not a good idea !! " ; \
-    fi
-
-# Cross-compile check for ARM64 on AMD64 and prepare build environment
-RUN if [ "${TARGETARCH}" = "arm64" ] && [ "${BUILDARCH}" != "${TARGETARCH}" ] ; then \
-      # Cross-compile ARM64 - compiler and toolchain
-      # GNU C compiler for the arm64 architecture and GNU C++ compiler
-      echo "Setup cross-compile for AMR64" && \
-      apt-get update && apt-get install -y \
-        gcc-aarch64-linux-gnu g++-aarch64-linux-gnu && \
-      rustup target add aarch64-unknown-linux-gnu && \
-      rustup toolchain install stable-aarch64-unknown-linux-gnu ; \
     fi
 
 # Install a non-standard toolchain if it has been requested. By default we use the toolchain specified in rust-toolchain.toml
@@ -99,8 +90,8 @@ RUN --mount=type=cache,id=rust-git-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sha
       # Cross-compile ARM64 - compiler and toolchain
       # GNU C compiler for the arm64 architecture and GNU C++ compiler
       echo "Setup cross-compile for AMR64" && \
-      apt-get update && apt-get install -y \
-        gcc-aarch64-linux-gnu g++-aarch64-linux-gnu && \
+#      apt-get update && apt-get install -y && \
+#        gcc-aarch64-linux-gnu g++-aarch64-linux-gnu && \
       rustup target add aarch64-unknown-linux-gnu && \
       rustup toolchain install stable-aarch64-unknown-linux-gnu ; \
     fi && \
