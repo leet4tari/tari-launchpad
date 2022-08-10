@@ -14,12 +14,11 @@ ARG TARGETVARIANT
 ARG RUST_TOOLCHAIN
 
 # Disable anti-cache
-#RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#run---mounttypecache
-#RUN --mount=type=cache,id=build-apt-cache-${BUILDOS}-${BUILDARCH}${BUILDVARIANT},sharing=locked,target=/var/cache/apt \
-#    --mount=type=cache,id=build-apt-lib-${BUILDOS}-${BUILDARCH}${BUILDVARIANT},sharing=locked,target=/var/lib/apt \
-
-RUN apt-get update && apt-get install -y \
+RUN --mount=type=cache,id=build-apt-cache-${BUILDOS}-${BUILDARCH}${BUILDVARIANT},sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,id=build-apt-lib-${BUILDOS}-${BUILDARCH}${BUILDVARIANT},sharing=locked,target=/var/lib/apt \
+  apt-get update && apt-get install -y \
   apt-transport-https \
   bash \
   ca-certificates \
@@ -51,11 +50,6 @@ RUN if [ "${BUILDARCH}" != "${TARGETARCH}" ] && [ "${ARCH}" = "native" ] ; then 
       echo "!! Cross-compile and native ARCH not a good idea !! " ; \
     fi
 
-# Install a non-standard toolchain if it has been requested. By default we use the toolchain specified in rust-toolchain.toml
-RUN if [ -n "${RUST_TOOLCHAIN}" ]; then \
-      rustup toolchain install ${RUST_TOOLCHAIN}; \
-    fi
-
 WORKDIR /tari
 
 ADD Cargo.toml .
@@ -71,13 +65,12 @@ ADD infrastructure infrastructure
 ADD dan_layer dan_layer
 ADD meta meta
 
-#RUN --mount=type=cache,id=rust-git-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/home/rust/.cargo/git \
-#    --mount=type=cache,id=rust-home-registry-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/home/rust/.cargo/registry \
-#    --mount=type=cache,id=rust-local-registry-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/usr/local/cargo/registry \
-#    --mount=type=cache,id=rust-src-target-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/home/rust/src/target \
-#    --mount=type=cache,id=rust-target-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/tari/target \
-
-RUN if [ "${TARGETARCH}" = "arm64" ] && [ "${BUILDARCH}" != "${TARGETARCH}" ] ; then \
+RUN --mount=type=cache,id=rust-git-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/home/rust/.cargo/git \
+    --mount=type=cache,id=rust-home-registry-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/home/rust/.cargo/registry \
+    --mount=type=cache,id=rust-local-registry-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/usr/local/cargo/registry \
+    --mount=type=cache,id=rust-src-target-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/home/rust/src/target \
+    --mount=type=cache,id=rust-target-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/tari/target \
+    if [ "${TARGETARCH}" = "arm64" ] && [ "${BUILDARCH}" != "${TARGETARCH}" ] ; then \
       # Hardcoded ARM64 envs for cross-compiling - FixMe soon
       export BUILD_TARGET="aarch64-unknown-linux-gnu/" && \
       export RUST_TARGET="--target=aarch64-unknown-linux-gnu" && \
@@ -89,9 +82,13 @@ RUN if [ "${TARGETARCH}" = "arm64" ] && [ "${BUILDARCH}" != "${TARGETARCH}" ] ; 
       export BINDGEN_EXTRA_CLANG_ARGS="--sysroot /usr/aarch64-linux-gnu/include/" && \
       export RUSTFLAGS="-C target_cpu=generic" && \
       export ROARING_ARCH=generic && \
-      echo "Setup cross-compile for AMR64" && \
       rustup target add aarch64-unknown-linux-gnu && \
       rustup toolchain install stable-aarch64-unknown-linux-gnu ; \
+    fi && \
+    if [ -n "${RUST_TOOLCHAIN}" ] ; then \
+      # Install a non-standard toolchain if it has been requested.
+      # By default we use the toolchain specified in rust-toolchain.toml
+      rustup toolchain install ${RUST_TOOLCHAIN} ; \
     fi && \
     rustup target list --installed && \
     rustup toolchain list && \
@@ -121,6 +118,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 #RUN --mount=type=cache,id=runtime-apt-cache-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/var/cache/apt \
 #    --mount=type=cache,id=runtime-apt-lib-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/var/lib/apt \
 #    --mount=type=cache,id=runtime-apt-lib-${TARGETOS}-${TARGETARCH}${TARGETVARIANT},sharing=locked,target=/var/lib/dpkg \
+#  apt-get update && apt-get --no-install-recommends install -y \
 
 RUN apt-get update && apt-get --no-install-recommends install -y \
   apt-transport-https \
