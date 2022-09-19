@@ -77,13 +77,32 @@ jobs:
           releaseDraft: true
           prerelease: false
 
+      - name: Build the app (testing) not MacOS
+        if: "!startsWith(runner.os,'macOS')"
+        continue-on-error: true
+        env:
+          CI: false
+        run: |
+          yarn run tauri build
+
       - name: Build the app (testing)
         if: startsWith(runner.os,'macOS')
         continue-on-error: true
+        env:
+          CI: false
         run: |
           yarn run tauri build --target x86_64-apple-darwin
           yarn run tauri build --target aarch64-apple-darwin
           yarn run tauri build --target universal-apple-darwin
+
+      - name: Artifact upload for not macOS DMG (testing)
+        if: "!startsWith(runner.os,'macOS')"
+        continue-on-error: true
+        uses: actions/upload-artifact@v3
+        with:
+          name: tari-launchpad-releases
+          path: |
+            "target/release/bundle/"
 
       - name: Artifact upload for macOS DMG (testing)
         if: startsWith(runner.os,'macOS')
