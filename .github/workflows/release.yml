@@ -110,15 +110,18 @@ jobs:
         with:
           name: tari-launchpad-releases
           path: |
-            "target/release/bundle/"
+            "${{ github.workspace }}/target/release/bundle/"
 
       - name: Artifact upload for macOS DMG (testing)
         if: startsWith(runner.os,'macOS')
         continue-on-error: true
         uses: actions/upload-artifact@v3
         with:
-          name: tari-launchpad-dmgs
+          name: tari-launchpad-osx
           path: |
-            "target/x86_64-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
-            "target/aarch64-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
-            "target/universal-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
+            "${{ github.workspace }}/target/x86_64-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
+            "${{ github.workspace }}/target/x86_64-apple-darwin/release/bundle/macos/tari-launchpad.app"
+            "${{ github.workspace }}/target/aarch64-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
+            "${{ github.workspace }}/target/aarch64-apple-darwin/release/bundle/macos/tari-launchpad.app"
+            "${{ github.workspace }}/target/universal-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
+            "${{ github.workspace }}/target/universal-apple-darwin/release/bundle/macos/tari-launchpad.app"
