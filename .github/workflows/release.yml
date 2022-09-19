@@ -33,10 +33,18 @@ jobs:
           node-version: 16
           cache: 'yarn'
 
-      - name: Rust setup
+      - name: Rust setup - native
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+
+      - name: Rust setup - macOS/aarch64
+        if: startsWith(runner.os,'macOS')
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-apple-darwin
+          override: true
 
       - name: Cache cargo files and outputs
         uses: Swatinem/rust-cache@v1
