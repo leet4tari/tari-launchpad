@@ -103,14 +103,15 @@ jobs:
           yarn run tauri build --target aarch64-apple-darwin
           yarn run tauri build --target universal-apple-darwin
 
-      - name: Artifact upload for not macOS DMG (testing)
+      - name: Artifact upload for Ubuntu (testing)
         if: "!startsWith(runner.os,'macOS')"
         continue-on-error: true
         uses: actions/upload-artifact@v3
         with:
-          name: tari-launchpad-releases
+          name: tari-launchpad-ubunt
+          # bundle/deb/tari-launchpad_1.1.0_amd64.deb, bundle/appimage/tari-launchpad_1.1.0_amd64.AppImage
           path: |
-            "${{ github.workspace }}/target/release/bundle/"
+            ${{ github.workspace }}/target/release/bundle/*
 
       - name: Artifact upload for macOS DMG (testing)
         if: startsWith(runner.os,'macOS')
@@ -118,10 +119,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: tari-launchpad-osx
+          # x86_64-apple-darwin, aarch64-apple-darwin, universal-apple-darwin
           path: |
-            "${{ github.workspace }}/target/x86_64-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
-            "${{ github.workspace }}/target/x86_64-apple-darwin/release/bundle/macos/tari-launchpad.app"
-            "${{ github.workspace }}/target/aarch64-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
-            "${{ github.workspace }}/target/aarch64-apple-darwin/release/bundle/macos/tari-launchpad.app"
-            "${{ github.workspace }}/target/universal-apple-darwin/release/bundle/dmg/tari-launchpad*.dmg"
-            "${{ github.workspace }}/target/universal-apple-darwin/release/bundle/macos/tari-launchpad.app"
+            ${{ github.workspace }}/target/**/release/bundle/dmg/tari-launchpad*
+            ${{ github.workspace }}/target/**/release/bundle/macos/tari-launchpad*
