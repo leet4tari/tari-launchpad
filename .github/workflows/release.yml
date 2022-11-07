@@ -8,11 +8,12 @@ name: Release
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
     branches:
+      - 'main'
       - 'build-*'
   workflow_dispatch:
 
 jobs:
-  release:
+  builds:
     strategy:
       fail-fast: false
       matrix:
@@ -73,19 +74,7 @@ jobs:
           cd ./gui-react
           yarn
 
-      - name: Build the app
-        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: v__VERSION__ # tauri-action replaces \_\_VERSION\_\_ with the app version
-          releaseName: 'v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
-          prerelease: false
-
-      - name: Build the app (Linux/testing)
+      - name: Build the app (Linux)
         if: startsWith(runner.os,'Linux')
         continue-on-error: true
         env:
@@ -94,7 +83,7 @@ jobs:
           yarn run tauri build --target x86_64-unknown-linux-gnu
           # yarn run tauri build --target aarch64-unknown-linux-gnu
 
-      - name: Build the app (macOS/testing)
+      - name: Build the app (macOS)
         if: startsWith(runner.os,'macOS')
         continue-on-error: true
         env:
@@ -104,7 +93,7 @@ jobs:
           yarn run tauri build --target aarch64-apple-darwin
           yarn run tauri build --target universal-apple-darwin
 
-      - name: Artifact upload (Linux/testing)
+      - name: Artifact upload (Linux)
         if: startsWith(runner.os,'Linux')
         continue-on-error: true
         uses: actions/upload-artifact@v3
@@ -115,7 +104,7 @@ jobs:
             ${{ github.workspace }}/target/**/release/bundle/deb/tari-launchpad*.deb
             ${{ github.workspace }}/target/**/release/bundle/appimage/tari-launchpad*.AppImage
 
-      - name: Artifact upload (macOS/testing)
+      - name: Artifact upload (macOS)
         if: startsWith(runner.os,'macOS')
         continue-on-error: true
         uses: actions/upload-artifact@v3
@@ -125,3 +114,32 @@ jobs:
           path: |
             ${{ github.workspace }}/target/**/release/bundle/dmg/tari-launchpad*.dmg
             ${{ github.workspace }}/target/**/release/bundle/macos/tari-launchpad*.app
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: builds
+    # if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    steps:
+      - name: Download binaries
+        uses: actions/download-artifact@v3
+        with:
+          path: tari-launchpad
+
+      - name: Verify checksums
+        shell: bash
+        working-directory: tari-launchpad
+        run: |
+          ls -alhtR
+          # find . -name "*.sha256sums" -print | xargs cat >> tari-launchpad.txt.sha256sums-verify
+          # cat tari-launchpad.txt.sha256sums-verify
+          # sha256sum -c tari-launchpad.txt.sha256sums-verify
+
+      - name: Create release
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        # tag should match - backend/tauri.conf.json [package : version]
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "tari-launchpad*/**/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true
+          draft: true
