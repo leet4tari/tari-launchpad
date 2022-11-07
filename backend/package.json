@@ -1,6 +1,6 @@
 {
   "name": "tari_launchpad",
-  "version": "v0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "tauri": "node ../../tooling/cli.js/bin/tauri"
   },
