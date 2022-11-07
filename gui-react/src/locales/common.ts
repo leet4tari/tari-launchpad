@@ -25,6 +25,8 @@ const translations: { [key: string]: { [key: string]: string } } = {
     tariWallet: 'Tari Wallet',
     moneroWallet: 'Monero Wallet',
     mining: 'Mining',
+    shaMining: 'SHA3 Mining',
+    mergeMining: 'Monero Merge Mining',
     problem: 'Problem',
     settings: 'Settings',
     wallet: 'Wallet',
@@ -37,6 +39,8 @@ const translations: { [key: string]: { [key: string]: string } } = {
     error: 'Error',
     today: 'Today',
     results: 'Results',
+    reset: 'Reset',
+    dangerZone: 'Danger Zone',
   },
   weekdayCapitals: {
     sunday: 'S',

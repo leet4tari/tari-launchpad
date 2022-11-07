@@ -77,6 +77,8 @@ const TariId = ({
             borderColor: theme.walletCopyBoxBorder,
             backgroundColor: theme.resetBackground,
             color: theme.textSecondary,
+            padding: showEmoji ? '0px 20px 5px 20px' : '7px 20px 5px 20px',
+            height: '55px',
           }}
         />
         <div
@@ -90,7 +92,10 @@ const TariId = ({
         >
           <Smiley
             on={showEmoji}
-            style={{ color: theme.textSecondary, display: 'inline-block' }}
+            style={{
+              color: theme.textSecondary,
+              display: 'inline-block',
+            }}
           />
         </div>
       </TariIdContainer>

@@ -38,7 +38,7 @@ mod service;
 mod shutdown;
 mod state;
 
-pub use cleanup::{reset_settings, try_cleanup};
+pub use cleanup::clean_docker;
 pub use create_workspace::create_new_workspace;
 pub use events::events;
 pub use health_check::status;

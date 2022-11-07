@@ -1,10 +1,11 @@
 export enum Settings {
   Mining = 'mining',
-  Wallet = 'wallet',
   BaseNode = 'baseNode',
+  Wallet = 'wallet',
   Docker = 'docker',
   // Logs = 'logs',
   Security = 'security',
+  Reset = 'reset',
 }
 
 export interface InitialSettings {

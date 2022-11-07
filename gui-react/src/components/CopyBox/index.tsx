@@ -66,7 +66,7 @@ const CopyBox = ({
         <Button
           variant='text'
           style={{
-            padding: 0,
+            padding: '0 0 0 10px',
             margin: 0,
             position: 'relative',
             flexGrow: '1',
