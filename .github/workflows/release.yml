@@ -98,12 +98,15 @@ jobs:
         run: |
           # /target/**/release/bundle/macos/tari-launchpad*.app
           target_temp="${{ runner.temp }}/${{ matrix.platform }}"
+          echo "${target_temp}"
           mkdir -p "${target_temp}"
           ls -alht "${{ github.workspace }}/target/"
           ls -alht "${target_temp}"
           find "${{ github.workspace }}/target/" \( -iname "*.deb" -o -iname "*.AppImage" \
             -o -iname "*.dmg" \) -exec cp -v {} ${target_temp} \;
-          shasum -a 256 "${target_temp}" >> "${target_temp}/${{ matrix.platform }}-files.txt.sha256sums"
+          cd "${target_temp}"
+          ls -alht "${target_temp}"
+          shasum -a 256 "*" >> "${{ matrix.platform }}.txt.sha256sums"
           ls -alht "${target_temp}"
 
       - name: Artifact upload - ${{ matrix.platform }}
