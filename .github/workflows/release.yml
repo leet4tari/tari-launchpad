@@ -106,7 +106,7 @@ jobs:
             -o -iname "*.dmg" \) -exec cp -v {} ${target_temp} \;
           cd "${target_temp}"
           ls -alht "${target_temp}"
-          shasum -a 256 "*" >> "${{ matrix.platform }}.txt.sha256sums"
+          shasum -a 256 * >> "${{ matrix.platform }}.txt.sha256sums"
           ls -alht "${target_temp}"
 
       - name: Artifact upload - ${{ matrix.platform }}
