@@ -70,6 +70,9 @@ jobs:
             libappindicator3-dev \
             librsvg2-dev \
             patchelf
+          sudo apt-get install --no-install-recommends --assume-yes \
+            gcc-aarch64-linux-gnu \
+            g++-aarch64-linux-gnu
           rustup target add aarch64-unknown-linux-gnu
 
       - name: Install dependencies (macOS)
@@ -93,7 +96,7 @@ jobs:
           CI: false
         run: |
           yarn run tauri build --target x86_64-unknown-linux-gnu
-          # yarn run tauri build --target aarch64-unknown-linux-gnu
+          yarn run tauri build --target aarch64-unknown-linux-gnu
 
       - name: Build the app (macOS)
         if: startsWith(runner.os,'macOS')
