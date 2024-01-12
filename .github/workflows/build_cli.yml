@@ -208,8 +208,9 @@ jobs:
 
       - name: Build release binaries
         # can't use bash for windows build, perl not supported
+        # https://yaml-multiline.info/
         # shell: bash
-        run: >-
+        run: >
           ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }}
             --target ${{ matrix.builds.target }}
             --bin tari-lp-cli ${{ matrix.builds.flags }}
