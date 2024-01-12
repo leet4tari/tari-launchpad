@@ -211,10 +211,10 @@ jobs:
         # https://yaml-multiline.info/
         # shell: bash
         run: >
-          ${{ env.CARGO }} build
-            ${{ env.CARGO_OPTIONS }} --target ${{ matrix.builds.target }}
-            --bin tari-lp-cli
-            ${{ matrix.builds.flags }} --locked
+          ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }}
+          --target ${{ matrix.builds.target }}
+          --bin tari-lp-cli
+          ${{ matrix.builds.flags }} --locked
 
       - name: Archive and Checksum Binaries
         if: ${{ false }}
