@@ -113,6 +113,7 @@ jobs:
         run: |
           #rustup target add ${{ matrix.builds.target }}
           #rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
+          rustup target add ${{ matrix.builds.target }}
           rustup target list
           rustup toolchain list
           rm -frv rust-toolchain.toml
