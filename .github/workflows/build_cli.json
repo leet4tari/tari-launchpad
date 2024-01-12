@@ -44,7 +44,7 @@
     "rust": "stable",
     "target": "x86_64-pc-windows-msvc",
     "cross": false,
-    "build_enabled": true
+    "build_enabled": false
   },
   {
     "name": "windows-arm64",
