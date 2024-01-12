@@ -82,6 +82,26 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      - name: Install macOS dependencies - arm64 hack
+        if: ${{ matrix.builds.name == 'macos-arm64' }}
+        run: |
+          #rustup target add ${{ matrix.builds.target }}
+          #rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
+          rm -frv rust-toolchain.toml
+          rustup target add ${{ matrix.builds.target }}
+          rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }} --force-non-host
+          #rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
+          echo "target list"
+          rustup target list
+          echo "toolchain list"
+          rustup toolchain list
+          rustup toolchain remove nightly-2023-06-03-x86_64-apple-darwin
+          #rustup toolchain remove stable-x86_64-apple-darwin
+          echo "target list"
+          rustup target list
+          echo "toolchain list"
+          rustup toolchain list
+
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@master
         with:
@@ -107,22 +127,6 @@ jobs:
         if: startsWith(runner.os,'macOS')
         run: |
           brew install cmake coreutils automake autoconf
-
-      - name: Install macOS dependencies - arm64 hack
-        if: ${{ matrix.builds.name == 'macos-arm64' }}
-        run: |
-          #rustup target add ${{ matrix.builds.target }}
-          #rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
-          rm -frv rust-toolchain.toml
-          rustup target add ${{ matrix.builds.target }}
-          rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }} --force-non-host
-          #rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
-          rustup target list
-          rustup toolchain list
-          rustup toolchain remove nightly-2023-06-03-x86_64-apple-darwin
-          #rustup toolchain remove stable-x86_64-apple-darwin
-          rustup target list
-          rustup toolchain list
 
       - name: Install Windows dependencies
         if: startsWith(runner.os,'Windows')
@@ -209,6 +213,7 @@ jobs:
       - name: Build release binaries
         # can't use bash for windows build, perl not supported
         # https://yaml-multiline.info/
+        # don't mess with indentation
         # shell: bash
         run: >
           ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }}
