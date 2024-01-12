@@ -107,12 +107,18 @@ jobs:
         if: startsWith(runner.os,'macOS')
         run: |
           brew install cmake coreutils automake autoconf
+
+      - name: Install macOS dependencies - arm64 hack
+        if: $${{ matrix.builds.name == 'macos-arm64' }}
+        run: |
           #rustup target add ${{ matrix.builds.target }}
-          #rustup toolchain install ${{ matrix.builds.rust }}${{ matrix.builds.target }}
+          #rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
           rustup target list
           rustup toolchain list
-          rm -fr rust-toolchain.toml
+          rm -frv rust-toolchain.toml
           rustup toolchain remove nightly-2023-06-03-x86_64-apple-darwin
+          rustup toolchain remove stable-x86_64-apple-darwin
+          rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
 
       - name: Install Windows dependencies
         if: startsWith(runner.os,'Windows')
@@ -197,6 +203,7 @@ jobs:
           echo "cross flag: ${{ matrix.builds.cross }}"
 
       - name: Build release binaries
+        # can't use bash for windows build, perl not supported
         # shell: bash
         run: ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }} --target ${{ matrix.builds.target }} --bin tari-lp-cli ${{ matrix.builds.flags }} --locked
 
