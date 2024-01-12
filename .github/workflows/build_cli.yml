@@ -109,14 +109,14 @@ jobs:
           brew install cmake coreutils automake autoconf
 
       - name: Install macOS dependencies - arm64 hack
-        if: $${{ matrix.builds.name == 'macos-arm64' }}
+        if: ${{ matrix.builds.name == 'macos-arm64' }}
         run: |
           #rustup target add ${{ matrix.builds.target }}
           #rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
           rm -frv rust-toolchain.toml
           rustup target add ${{ matrix.builds.target }}
-          rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
-          rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
+          rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }} --force-non-host
+          #rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
           rustup target list
           rustup toolchain list
           rustup toolchain remove nightly-2023-06-03-x86_64-apple-darwin
