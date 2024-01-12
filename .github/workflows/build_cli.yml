@@ -157,6 +157,7 @@ jobs:
           echo "PLATFORM_SPECIFIC_DIR=windows" >> $GITHUB_ENV
           echo "SQLITE3_LIB_DIR=C:\vcpkg\installed\x64-windows\lib" >> $GITHUB_ENV
           echo "OPENSSL_DIR=C:\Program Files\OpenSSL-Win64" >> $GITHUB_ENV
+          echo "X86_64_PC_WINDOWS_MSVC_OPENSSL_DIR="C:\Program Files\OpenSSL-Win64" >> $GITHUB_ENV
           echo "LIBCLANG_PATH=C:\Program Files\LLVM\bin" >> $GITHUB_ENV
           echo "C:\Strawberry\perl\bin" >> $GITHUB_PATH
 
