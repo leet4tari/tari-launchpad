@@ -92,13 +92,13 @@ jobs:
           rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }} --force-non-host
           #rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
           echo "target list"
-          rustup target list
+          rustup target list --installed
           echo "toolchain list"
           rustup toolchain list
           rustup toolchain remove nightly-2023-06-03-x86_64-apple-darwin
           #rustup toolchain remove stable-x86_64-apple-darwin
           echo "target list"
-          rustup target list
+          rustup target list --installed
           echo "toolchain list"
           rustup toolchain list
 
