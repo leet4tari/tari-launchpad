@@ -94,7 +94,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo bash scripts/cli/install_ubuntu_dependencies.sh
-          sudo apt-get install --no-install-recommends --assume-yes libgtk-3-dev
+          sudo bash scripts/install_ubuntu_dependencies.sh
 
       - name: Install Linux dependencies - Ubuntu - cross-compile arm64 on x86-64
         if: ${{ startsWith(runner.os,'Linux') && ( ! matrix.builds.cross ) && matrix.builds.name == 'linux-arm64' }}
@@ -119,7 +119,7 @@ jobs:
           # choco upgrade psutils -y
           choco upgrade openssl -y
           # Should already be installed
-          # choco upgrade strawberryperl -y
+          choco upgrade strawberryperl -y
 
       - name: Set environment variables - Nix
         if: ${{ ! startsWith(runner.os,'Windows') }}
@@ -192,7 +192,7 @@ jobs:
           echo "cross flag: ${{ matrix.builds.cross }}"
 
       - name: Build release binaries
-        shell: bash
+        # shell: bash
         run: |
           ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }} \
             --target ${{ matrix.builds.target }} \
