@@ -37,7 +37,7 @@ jobs:
         run: |
           #
           # build all targets images
-          # matrix=$( jq -s -c .[] .github/workflows/base_node_binaries.json )
+          # matrix=$( jq -s -c .[] ${{ env.matrix-json-file }} )
           #
           # build only single target image
           # matrix_selection=$( jq -c '.[] | select( ."name" == "linux-x86_64" )' ${{ env.matrix-json-file }} )

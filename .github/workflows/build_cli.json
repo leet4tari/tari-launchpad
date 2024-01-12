@@ -29,7 +29,7 @@
     "target_cpu": "generic",
     "features": "safe",
     "target_bins": "--bin minotari_node --bin minotari_console_wallet --bin minotari_merge_mining_proxy --bin minotari_miner",
-    "flags": "--workspace --exclude minotari_mining_helper_ffi --exclude tari_integration_tests"
+    "flags": "--workspace --exclude minotari_mining_helper_ffi --exclude tari_integration_tests",
     "build_enabled": false
   },
   {
