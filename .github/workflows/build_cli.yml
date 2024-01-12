@@ -113,13 +113,16 @@ jobs:
         run: |
           #rustup target add ${{ matrix.builds.target }}
           #rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
+          rm -frv rust-toolchain.toml
           rustup target add ${{ matrix.builds.target }}
+          rustup toolchain install ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
+          rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
           rustup target list
           rustup toolchain list
-          rm -frv rust-toolchain.toml
           rustup toolchain remove nightly-2023-06-03-x86_64-apple-darwin
-          rustup toolchain remove stable-x86_64-apple-darwin
-          rustup default ${{ matrix.builds.rust }}-${{ matrix.builds.target }}
+          #rustup toolchain remove stable-x86_64-apple-darwin
+          rustup target list
+          rustup toolchain list
 
       - name: Install Windows dependencies
         if: startsWith(runner.os,'Windows')
@@ -206,7 +209,11 @@ jobs:
       - name: Build release binaries
         # can't use bash for windows build, perl not supported
         # shell: bash
-        run: ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }} --target ${{ matrix.builds.target }} --bin tari-lp-cli ${{ matrix.builds.flags }} --locked
+        run: >-
+          ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }}
+            --target ${{ matrix.builds.target }}
+            --bin tari-lp-cli ${{ matrix.builds.flags }}
+            --locked
 
       - name: Archive and Checksum Binaries
         if: ${{ false }}
