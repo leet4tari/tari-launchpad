@@ -167,6 +167,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
+          key: ${{ matrix.builds.target }}
 
       - name: Install and setup cargo cross
         if: ${{ matrix.builds.cross }}
@@ -193,11 +194,7 @@ jobs:
 
       - name: Build release binaries
         # shell: bash
-        run: |
-          ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }} \
-            --target ${{ matrix.builds.target }} \
-            --bin tari-lp-cli \
-            ${{ matrix.builds.flags }} --locked
+        run: ${{ env.CARGO }} build ${{ env.CARGO_OPTIONS }} --target ${{ matrix.builds.target }} --bin tari-lp-cli ${{ matrix.builds.flags }} --locked
 
       - name: Archive and Checksum Binaries
         if: ${{ false }}
