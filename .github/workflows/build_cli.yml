@@ -119,7 +119,7 @@ jobs:
           # choco upgrade psutils -y
           choco upgrade openssl -y
           # Should already be installed
-          choco upgrade strawberryperl -y
+          # choco upgrade strawberryperl -y
 
       - name: Set environment variables - Nix
         if: ${{ ! startsWith(runner.os,'Windows') }}
