@@ -107,7 +107,12 @@ jobs:
         if: startsWith(runner.os,'macOS')
         run: |
           brew install cmake coreutils automake autoconf
-          rustup target add ${{ matrix.builds.target }}
+          #rustup target add ${{ matrix.builds.target }}
+          #rustup toolchain install ${{ matrix.builds.rust }}${{ matrix.builds.target }}
+          rustup target list
+          rustup toolchain list
+          rm -fr rust-toolchain.toml
+          rustup toolchain remove nightly-2023-06-03-x86_64-apple-darwin
 
       - name: Install Windows dependencies
         if: startsWith(runner.os,'Windows')
@@ -157,7 +162,6 @@ jobs:
           echo "TBN_DIST=\dist" >> $GITHUB_ENV
           echo "PLATFORM_SPECIFIC_DIR=windows" >> $GITHUB_ENV
           echo "SQLITE3_LIB_DIR=C:\vcpkg\installed\x64-windows\lib" >> $GITHUB_ENV
-          echo "OPENSSL_DIR=C:\Program Files\OpenSSL-Win64" >> $GITHUB_ENV
           echo "X86_64_PC_WINDOWS_MSVC_OPENSSL_DIR=C:\Program Files\OpenSSL-Win64" >> $GITHUB_ENV
           echo "LIBCLANG_PATH=C:\Program Files\LLVM\bin" >> $GITHUB_ENV
           echo "C:\Strawberry\perl\bin" >> $GITHUB_PATH
