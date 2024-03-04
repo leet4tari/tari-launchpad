@@ -22,10 +22,11 @@ jobs:
       fail-fast: false
       matrix:
         platform: [
-          macos-latest,
           ubuntu-latest,
-          windows-latest,
         ]
+#          macos-latest,
+#          ubuntu-latest,
+#          windows-latest,
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -83,8 +84,10 @@ jobs:
       - name: Install tauri-cli and typescript
         run: |
           # cargo install tauri-cli
-          npm install --save react react-dom @types/react @types/react-dom
-          npm install typescript@latest -g
+          #npm install --save react react-dom @types/react @types/react-dom
+          #npm install typescript@latest -g
+          yarn add typescript
+          yarn add -D @types/node
           tsc --version
 
       - name: Install app dependencies and build web
