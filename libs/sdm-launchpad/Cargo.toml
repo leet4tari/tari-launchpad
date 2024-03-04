@@ -7,10 +7,10 @@ repository = "https://github.com/tari-project/tari-launchpad"
 edition = "2021"
 
 [dependencies]
-minotari_app_grpc = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.2" }
-minotari_node_grpc_client = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.2" }
-minotari_wallet_grpc_client = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.2" }
-tari_common_types = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.2" }
+minotari_app_grpc = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.5" }
+minotari_node_grpc_client = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.5" }
+minotari_wallet_grpc_client = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.5" }
+tari_common_types = { git = "https://github.com/tari-project/tari", tag = "v1.0.0-rc.5" }
 tari_launchpad_protocol = { path = "../protocol" }
 tari_sdm = { path = "../sdm" }
 tari_sdm_assets = { path = "../sdm-assets" }
