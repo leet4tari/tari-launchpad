@@ -80,6 +80,12 @@ jobs:
           echo "AARCH64_APPLE_DARWIN_OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib" >> $GITHUB_ENV
           rustup target add aarch64-apple-darwin
 
+      - name: Install tauri-cli and typescript
+        run: |
+          cargo install tauri-cli
+          npm install typescript@latest -g
+          tsc --version
+
       - name: Install app dependencies and build web
         run: |
           yarn
