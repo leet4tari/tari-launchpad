@@ -82,7 +82,8 @@ jobs:
 
       - name: Install tauri-cli and typescript
         run: |
-          cargo install tauri-cli
+          # cargo install tauri-cli
+          npm install --save react react-dom @types/react @types/react-dom
           npm install typescript@latest -g
           tsc --version
 
