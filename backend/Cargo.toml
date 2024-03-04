@@ -1,3 +1,6 @@
+[workspace]
+members = []
+
 [package]
 name = "tari_launchpad"
 version = "1.6.0"
