@@ -125,6 +125,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo bash scripts/cli/install_ubuntu_dependencies-arm64.sh
+          sudo bash scripts/install_ubuntu_dependencies.sh
           rustup target add ${{ matrix.builds.target }}
 
       - name: Install Linux dependencies - Ubuntu - cross-compile riscv64 on x86-64
@@ -132,6 +133,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo bash scripts/cli/install_ubuntu_dependencies-cross_compile.sh riscv64
+          sudo bash scripts/install_ubuntu_dependencies.sh
           rustup target add ${{ matrix.builds.target }}
 
       - name: Install macOS dependencies
