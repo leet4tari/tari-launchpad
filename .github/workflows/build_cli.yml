@@ -127,6 +127,8 @@ jobs:
           sudo bash scripts/cli/install_ubuntu_dependencies-arm64.sh
           sudo bash scripts/install_ubuntu_dependencies.sh
           rustup target add ${{ matrix.builds.target }}
+          # export PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu/
+          echo "PKG_CONFIG_SYSROOT_DIR=/usr/$(echo "${${{ matrix.builds.target }}//-unknown/}")/" >> $GITHUB_ENV
 
       - name: Install Linux dependencies - Ubuntu - cross-compile riscv64 on x86-64
         if: ${{ startsWith(runner.os,'Linux') && ( ! matrix.builds.cross ) && matrix.builds.name == 'linux-riscv64' }}
@@ -135,6 +137,8 @@ jobs:
           sudo bash scripts/cli/install_ubuntu_dependencies-cross_compile.sh riscv64
           sudo bash scripts/install_ubuntu_dependencies.sh
           rustup target add ${{ matrix.builds.target }}
+          # export PKG_CONFIG_SYSROOT_DIR=/usr/riscv64-linux-gnu/
+          echo "PKG_CONFIG_SYSROOT_DIR=/usr/$(echo "${${{ matrix.builds.target }}//-unknown/}")/" >> $GITHUB_ENV
 
       - name: Install macOS dependencies
         if: startsWith(runner.os,'macOS')
