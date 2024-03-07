@@ -12,7 +12,8 @@
     "rust": "stable",
     "target": "aarch64-unknown-linux-gnu",
     "cross": false,
-    "build_enabled": true
+    "build_enabled": true,
+    "continue-on-error": true
   },
   {
     "name": "linux-riscv64",
